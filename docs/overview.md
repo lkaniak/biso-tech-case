@@ -1,5 +1,8 @@
+# Estrutura de arquivos
+
+```
 ├── Dockerfile                                          # imagem do backend
-├── alembic.ini             
+├── alembic.ini
 ├── docker-compose.yaml                                 # contem definicoes das imagens do backend e do postgreSQL
 ├── docs                                                # contem descrições sobre o projeto
 │   ├── how-to.md
@@ -31,3 +34,4 @@
     ├── prestart.sh
     ├── test.sh
     └── tests-start.sh
+```
