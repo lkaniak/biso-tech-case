@@ -1,0 +1,28 @@
+version: '3.7'
+services:
+    postgresql:
+      image: postgres:latest
+      restart: always
+      shm_size: 128mb
+      environment:
+        - POSTGRES_PASSWORD=123456
+        - POSTGRES_USER=movie_db
+      logging:
+        options:
+          max-size: 10m
+          max-file: "3"
+
+    movies-backend:
+      restart: always
+      depends_on:
+        - postgresql
+      env_file:
+        - .env
+      ports:
+        - "8888:8888"
+      volumes:
+        - ./movie-app/:/app
+      build:
+        context: ./movie-app
+        args:
+          INSTALL_DEV: ${INSTALL_DEV-true}
