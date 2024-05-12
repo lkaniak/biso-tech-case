@@ -23,23 +23,21 @@ class UserUpdate(UserBase):
     email: str | None = None
     nickname: str | None = None
     password: str | None = None
+    current_password: str | None = None
+    new_password: str | None = None
 
 
 class UserUpdateMe(SQLModel):
     full_name: str | None = None
     nickname: str | None = None
     email: str | None = None
-
-
-class UpdatePassword(SQLModel):
-    current_password: str
-    new_password: str
+    current_password: str | None = None
+    new_password: str | None = None
 
 
 class User(UserBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
     hashed_password: str
-    items: list["Item"] = Relationship(back_populates="owner")
 
 
 class UserPublic(UserBase):

@@ -13,6 +13,8 @@ COPY pyproject.toml /app/
 ARG INSTALL_DEV=false
 RUN bash -c "if [ $INSTALL_DEV == 'true' ] ; then poetry install --no-root ; else poetry install --no-root --only main ; fi"
 
+RUN poetry self add poetry-dotenv-plugin
+
 ENV PYTHONPATH=/app
 
 COPY ./scripts/ /app/

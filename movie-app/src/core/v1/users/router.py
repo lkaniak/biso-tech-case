@@ -4,7 +4,8 @@ from src.core.v1.users.deps import (
     valid_user_id,
     valid_user_update,
     valid_user_create,
-    allow_open_registration, valid_user_delete,
+    allow_open_registration,
+    valid_user_delete,
 )
 from src.core.v1.ratings.schemas import Rating
 import service as user_service
@@ -112,7 +113,9 @@ def update_user(
 
 @router.delete("/{user_id}", dependencies=[Depends(get_current_active_superuser)])
 def delete_user(
-    session: SessionDep, user_id: int, current_user: CurrentUser = Depends(valid_user_delete)
+    session: SessionDep,
+    user_id: int,
+    current_user: CurrentUser = Depends(valid_user_delete),
 ) -> Message:
     """
     Remover um usuário por id.
