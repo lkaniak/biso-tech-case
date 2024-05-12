@@ -8,15 +8,14 @@ from src.core.v1.users.deps import (
     valid_user_delete,
 )
 from src.core.v1.ratings.schemas import Rating
-import service as user_service
+import src.core.v1.users.service as user_service
 
-from app.api.deps import (
+from src.core.v1.auth.deps import (
     CurrentUser,
     SessionDep,
     get_current_active_superuser,
 )
 from src.core.v1.users.models import (
-    UpdatePassword,
     User,
     UserCreate,
     UserPublic,

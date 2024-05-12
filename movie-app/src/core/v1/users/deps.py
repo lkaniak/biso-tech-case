@@ -13,7 +13,6 @@ from src.infrastructure.security import verify_password
 from src.infrastructure.settings import settings
 from src.core.v1.auth.deps import CurrentUser, get_current_active_superuser
 from src.core.v1.users.models import (
-    UpdatePassword,
     User,
     UserCreate,
     UserPublic,
