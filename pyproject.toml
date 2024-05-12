@@ -3,6 +3,7 @@ name = "movie-app"
 version = "0.1.0"
 description = "recomendação e catálogo de filmes"
 authors = ["Lucas Kaniak <kaniak.lucas@outlook.com>"]
+packages = [{include = "src", from="movie-app"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"

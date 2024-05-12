@@ -10,7 +10,8 @@ from sqlmodel import Session
 from src.infrastructure import security
 from src.infrastructure import settings
 from src.infrastructure.database import engine
-from app.models import TokenPayload, User
+from src.core.v1.auth.models import TokenPayload
+from src.core.v1.users.models import User
 
 reusable_oauth2 = OAuth2PasswordBearer(
     tokenUrl=f"{settings.API_V1_STR}/login/access-token"
