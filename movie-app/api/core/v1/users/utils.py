@@ -31,15 +31,11 @@ def init_db_users() -> None:
 def init_test_db() -> None:
     with Session(engine) as session:
         db_session.set(session)
-        SQLModel.metadata.create_all(
-            create_engine(str(test_settings.SQLALCHEMY_DATABASE_URI))
-        )
-        session = db_session.get()
         user = session.exec(
             select(User).where(User.email == test_settings.EMAIL_TEST_USER)
         ).first()
         if not user:
-            print(f'test_settings: {test_settings}')
+            print(f"test_settings: {test_settings}")
             user_in = UserCreate(
                 email=test_settings.EMAIL_TEST_USER,
                 password=test_settings.FIRST_SUPERUSER_PASSWORD,

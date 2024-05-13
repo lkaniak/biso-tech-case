@@ -1,5 +1,8 @@
 import logging
 
+import src.core
+
+print(src.core)
 from src.core.v1.users.utils import init_test_db
 
 logging.basicConfig(level=logging.INFO)
