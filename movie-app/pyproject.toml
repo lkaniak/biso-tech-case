@@ -23,6 +23,7 @@ sqlmodel = "^0.0.16"
 bcrypt = "4.0.1"
 pydantic-settings = "^2.2.1"
 contextvars = "^2.4"
+random-username = "^1.0.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.3"

@@ -8,7 +8,7 @@ from src.infrastructure.security import get_password_hash
 from src.infrastructure.settings import settings
 from src.core.v1.users.service import create_user
 from src.infrastructure.database.session import db_session
-from src.tests.fixtures import test_settings
+from src.tests.settings import test_settings
 
 
 def init_db_users() -> None:
@@ -29,18 +29,24 @@ def init_db_users() -> None:
 
 
 def init_test_db() -> None:
-
-    SQLModel.metadata.create_all(
-        create_engine(str(test_settings.SQLALCHEMY_DATABASE_URI))
-    )
-    session = db_session.get()
-    user = session.exec(
-        select(User).where(User.email == test_settings.TEST_SUPERUSER)
-    ).first()
-    if not user:
-        user_in = UserCreate(
-            email=test_settings.EMAIL_TEST_USER,
-            password=test_settings.TEST_SUPERUSER_PASSWORD,
-            is_superuser=True,
+    with Session(engine) as session:
+        db_session.set(session)
+        SQLModel.metadata.create_all(
+            create_engine(str(test_settings.SQLALCHEMY_DATABASE_URI))
         )
-        user = create_user(user_create=user_in)
+        session = db_session.get()
+        user = session.exec(
+            select(User).where(User.email == test_settings.EMAIL_TEST_USER)
+        ).first()
+        if not user:
+            print(f'test_settings: {test_settings}')
+            user_in = UserCreate(
+                email=test_settings.EMAIL_TEST_USER,
+                password=test_settings.FIRST_SUPERUSER_PASSWORD,
+                nickname=test_settings.FIRST_SUPERUSER_NICKNAME,
+                hashed_password=get_password_hash(
+                    test_settings.FIRST_SUPERUSER_PASSWORD
+                ),
+                is_superuser=True,
+            )
+            user = create_user(user_create=user_in)

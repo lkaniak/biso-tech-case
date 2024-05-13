@@ -1332,6 +1332,17 @@ files = [
 ]
 
 [[package]]
+name = "random-username"
+version = "1.0.2"
+description = "Randomly generate compelling usernames."
+optional = false
+python-versions = "*"
+files = [
+    {file = "random-username-1.0.2.tar.gz", hash = "sha256:5fdc0604b5d1bdfe4acf4cd7491a9de1caf41bbdd890f646b434e09ae2a1b7ce"},
+    {file = "random_username-1.0.2-py3-none-any.whl", hash = "sha256:2536feb63fecde7e01ede4a541aadb6f0b58794a7ab327ca5369d2a4b7664c06"},
+]
+
+[[package]]
 name = "rsa"
 version = "4.9"
 description = "Pure-Python RSA implementation"
@@ -1873,4 +1884,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "751a86cf0df2896b75a4663de5c84a1de870d37cda6abc81d25ad0148dad9c66"
+content-hash = "f88f5a1c1ccb2c5b5cb0ccf3c993f3b54d36df6030014420acf91ddbc6177996"

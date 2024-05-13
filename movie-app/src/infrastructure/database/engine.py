@@ -3,7 +3,7 @@ import os
 from sqlalchemy import create_engine
 
 from src.infrastructure.settings import settings
-from src.tests.fixtures import test_settings
+from src.tests.settings import test_settings
 
 engine = create_engine(
     str(

@@ -36,7 +36,7 @@ def create_user(*, user_create: UserCreate) -> User:
     return db_obj
 
 
-def update_user(*, user_in: UserUpdate) -> Any:
+def update_user(*, user_id: int, user_in: UserUpdate) -> Any:
     session = db_session.get()
     user_data = user_in.model_dump(exclude_unset=True)
     extra_data = {}
@@ -44,7 +44,7 @@ def update_user(*, user_in: UserUpdate) -> Any:
         password = user_data["password"]
         hashed_password = get_password_hash(password)
         extra_data["hashed_password"] = hashed_password
-    db_user = session.get(User, user_in.user_id)
+    db_user = session.get(User, user_id)
     db_user.sqlmodel_update(user_data, update=extra_data)
     session.add(db_user)
     session.commit()
@@ -64,8 +64,8 @@ def update_me_user(*, user_in: UserUpdate, current_user: User) -> Any:
 
 def delete_user(*, user_id: int):
     session = db_session.get()
-    user = db_session.get(User, user_id)
-    statement = delete(User).where(User.owner_id == user_id)
+    user = session.get(User, user_id)
+    statement = select(User).where(User.id == user_id)
     session.exec(statement)  # type: ignore
     session.delete(user)
     session.commit()

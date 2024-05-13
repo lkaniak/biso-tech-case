@@ -30,8 +30,8 @@
 │   │   ├── main.py                       # arquivo de entrada do FastAPI
 │   │   ├── prestart.sh                   # arquivo necessário que é usado como [entrypoint](https://docs.docker.com/reference/dockerfile/#entrypoint) da imagem
 │   │   └── tests                         # unit tests
-|               [...]
-│               └── tests-start.sh        # arquivos para configurar o ambiente de teste
+|   │           [...]
+│   │           └── tests-start.sh        # arquivos para configurar o ambiente de teste
 │   └── scripts                           # pasta auxiliar para scripts (parecido com a sessão scripts do package.json)
 │           ├───py
 │               ├── format.sh

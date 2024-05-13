@@ -14,6 +14,18 @@
 5)
 
 
-# Testes
+## Testes
 
-1) criar um database na imagem do postgresql com o nome concatenando a variável de ambiente ``POSTGRES_DB`` com ``_test``. ex: ``my_db_test``
+**OBS:** é possível (mas não obrigatório) configurar os parâmetros do user de teste setando as variáveis:
+
+```
+EMAIL_TEST_USER
+FIRST_SUPERUSER
+FIRST_SUPERUSER_PASSWORD
+```
+
+1) seguir as etapas para setar a shell do poetry
+2) criar um database na imagem do postgresql com o nome concatenando a variável de ambiente ``POSTGRES_DB``
+com ``_test``. ex: ``my_db_test``
+3) setar a variável ``ENVIRONMENT`` para ``staging``
+4) rodar na pasta movie-app ``coverage run --source src -m pytest``

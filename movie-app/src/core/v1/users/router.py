@@ -107,13 +107,14 @@ def read_user_by_id(
 def update_user(
     *,
     user_in: UserUpdate = Depends(valid_user_update),
+    user_id: int,
     current_user: User = Depends(get_current_user),
 ):
     """
     Update em um usuário por id.
     """
 
-    db_user = user_service.update_user(user_in=user_in)
+    db_user = user_service.update_user(user_in=user_in, user_id=user_id)
     return db_user
 
 
