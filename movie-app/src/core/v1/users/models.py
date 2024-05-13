@@ -7,6 +7,7 @@ class UserBase(SQLModel):
     is_active: bool = True
     is_superuser: bool = False
     full_name: str | None = None
+    nickname: str | None = None
 
 
 class UserCreate(UserBase):

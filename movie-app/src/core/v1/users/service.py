@@ -19,10 +19,6 @@ from src.core.v1.auth.deps import CurrentUser
 from src.infrastructure.security import get_password_hash
 
 
-def get_by_id(session: SessionDep, user_id: int):
-    return session.get(User, user_id)
-
-
 def list_users(session: SessionDep, skip=0, limit=100):
     count_statement = select(func.count()).select_from(User)
     count = session.exec(count_statement).one()
@@ -77,6 +73,10 @@ def delete_user(*, session: SessionDep, user_id: int):
     session.exec(statement)  # type: ignore
     session.delete(user)
     session.commit()
+
+
+def get_by_id(session: SessionDep, user_id: int):
+    return session.get(User, user_id)
 
 
 def get_user_by_email(*, session: SessionDep, email: str) -> User | None:

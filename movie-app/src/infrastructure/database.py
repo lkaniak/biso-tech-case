@@ -1,7 +1,8 @@
 import os
 from collections.abc import Generator
 from typing import Annotated
-from sqlmodel import Session, create_engine, select
+from sqlmodel import Session, create_engine
+
 from src.infrastructure.settings import settings
 from fastapi import Depends
 
