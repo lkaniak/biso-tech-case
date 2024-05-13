@@ -1,26 +1,20 @@
-from sqlmodel import col, delete, func, select
+from sqlmodel import delete, func, select
+
 from src.lib.models import ListData
 from typing import Any
-from src.infrastructure.database import SessionDep
-from models import (
-    Item,
-    Message,
-    UpdatePassword,
+from src.core.v1.users.models import (
     User,
     UserCreate,
-    UserPublic,
-    UserRegister,
-    UsersPublic,
     UserUpdate,
-    UserUpdateMe,
 )
 
-from src.core.v1.auth.deps import CurrentUser
 from src.infrastructure.security import get_password_hash
+from src.infrastructure.database.session import db_session
 
 
-def list_users(session: SessionDep, skip=0, limit=100):
+def list_users(skip=0, limit=100):
     count_statement = select(func.count()).select_from(User)
+    session = db_session.get()
     count = session.exec(count_statement).one()
 
     statement = select(User).offset(skip).limit(limit)
@@ -29,7 +23,8 @@ def list_users(session: SessionDep, skip=0, limit=100):
     return ListData(count=count, data=users)
 
 
-def create_user(*, session: SessionDep, user_create: UserCreate) -> User:
+def create_user(*, user_create: UserCreate) -> User:
+    session = db_session.get()
     valid_user_create = UserCreate.model_validate(user_create)
     db_obj = User.model_validate(
         valid_user_create,
@@ -41,7 +36,8 @@ def create_user(*, session: SessionDep, user_create: UserCreate) -> User:
     return db_obj
 
 
-def update_user(*, session: SessionDep, user_in: UserUpdate) -> Any:
+def update_user(*, user_in: UserUpdate) -> Any:
+    session = db_session.get()
     user_data = user_in.model_dump(exclude_unset=True)
     extra_data = {}
     if "password" in user_data:
@@ -56,9 +52,8 @@ def update_user(*, session: SessionDep, user_in: UserUpdate) -> Any:
     return db_user
 
 
-def update_me_user(
-    *, session: SessionDep, user_in: UserUpdate, current_user: CurrentUser
-) -> Any:
+def update_me_user(*, user_in: UserUpdate, current_user: User) -> Any:
+    session = db_session.get()
     user_data = user_in.model_dump(exclude_unset=True)
     current_user.sqlmodel_update(user_data)
     session.add(current_user)
@@ -67,19 +62,22 @@ def update_me_user(
     return current_user
 
 
-def delete_user(*, session: SessionDep, user_id: int):
-    user = session.get(User, user_id)
+def delete_user(*, user_id: int):
+    session = db_session.get()
+    user = db_session.get(User, user_id)
     statement = delete(User).where(User.owner_id == user_id)
     session.exec(statement)  # type: ignore
     session.delete(user)
     session.commit()
 
 
-def get_by_id(session: SessionDep, user_id: int):
+def get_by_id(user_id: int):
+    session = db_session.get()
     return session.get(User, user_id)
 
 
-def get_user_by_email(*, session: SessionDep, email: str) -> User | None:
+def get_user_by_email(*, email: str) -> User | None:
+    session = db_session.get()
     statement = select(User).where(User.email == email)
     session_user = session.exec(statement).first()
     return session_user

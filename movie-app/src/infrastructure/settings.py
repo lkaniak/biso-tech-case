@@ -29,9 +29,16 @@ class Settings(BaseSettings):
     )
     API_V1_STR: str = "/api/v1"
     SECRET_KEY: str = secrets.token_urlsafe(32)
+    REFRESH_SECRET_KEY: str = secrets.token_urlsafe(16)
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
     DOMAIN: str = "localhost"
     ENVIRONMENT: Literal["development", "staging", "production"] = "development"
+
+    EMAIL_TEST_USER: str = ""
+    EMAIL_FIRST_SUPERUSER: str = "admin@test.com"
+    FIRST_SUPERUSER: str = "Test User"
+    FIRST_SUPERUSER_PASSWORD: str = "mudar123"
+    FIRST_SUPERUSER_NICKNAME: str = "super_admin"
 
     @computed_field  # type: ignore[misc]
     @property

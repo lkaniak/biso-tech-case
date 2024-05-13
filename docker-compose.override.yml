@@ -1,0 +1,25 @@
+services:
+
+  postgresql:
+    restart: "no"
+    ports:
+      - "5432:5432"
+
+  movies-backend:
+    restart: "no"
+    ports:
+      - "8888:8888"
+    environment:
+      - POSTGRES_SERVER=postgresql
+    volumes:
+      - ./movie-app/:/app
+    build:
+      context: ./movie-app
+      args:
+        INSTALL_DEV: ${INSTALL_DEV-true}
+    # command: sleep infinity  # comando que vem com a imagem para deixar o container rodando
+    command: /start-reload.sh
+
+networks:
+    movies_network:
+      external: false

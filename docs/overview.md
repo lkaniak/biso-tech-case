@@ -1,18 +1,17 @@
 # Estrutura de arquivos
 
 ```
-├── Dockerfile                            # imagem do backend
-├── alembic.ini
+├── .env                                  # variáveis de ambiente
 ├── docker-compose.yaml                   # contem definicoes das imagens do backend e do postgreSQL
+├── docker-compose.override.yaml          # arquivo para redefinir configs padrão do compose e setar um ambiente dev
 ├── docs                                  # contem descrições sobre o projeto
-│   ├── how-to.md
-│   ├── overview.md
-│   └── proposta.md
 ├── movie-app                             # pasta do app
-│   ├── alembic                           # migrations
+│   ├── Dockerfile                        # imagem do backend
+│   ├── alembic.ini                       # config das migrations
 │   ├── lib                               # códigos reusáveis pelos 3 módulos (recommendation, src, test)
 │   ├── recommendation                    # sistema de recomendação
 │   ├── src                               # src da api
+│   │   ├── alembic                       # migrations
 │   │   ├── core                          # domínio principal do app
 │   │   │   └── v1                        # versionamento da api
 │   │   │       ├── routes.py             # agregador das rotas do app
@@ -28,13 +27,18 @@
 │   │   │           └── service.py        # business logic do model
 │   │   ├── infrastructure                # configs do app (db, security, fastAPI, etc)
 │   │   ├── lib                           # códigos reusáveis pelos módulos da api
-│   │   └── main.py                       # arquivo de entrada do FastAPI
-│   └── test                              # unit tests
-├── pyproject.toml                        # definicao do env para o [Poetry](https://python-poetry.org/docs/pyproject/)
-└── scripts                               # pasta auxiliar para scripts (parecido com a sessão scripts do package.json)
-    ├── format.sh
-    ├── lint.sh
-    ├── prestart.sh
-    ├── test.sh
-    └── tests-start.sh
+│   │   ├── main.py                       # arquivo de entrada do FastAPI
+│   │   ├── prestart.sh                   # arquivo necessário que é usado como [entrypoint](https://docs.docker.com/reference/dockerfile/#entrypoint) da imagem
+│   │   └── tests                         # unit tests
+|               [...]
+│               └── tests-start.sh        # arquivos para configurar o ambiente de teste
+│   └── scripts                           # pasta auxiliar para scripts (parecido com a sessão scripts do package.json)
+│           ├───py
+│               ├── format.sh
+│           └───unix
+│               ├── format.sh
+│               ├── lint.sh
+│               ├── prestart.sh
+│               └── tests-start.sh
+└── pyproject.toml                        # definicao do env para o [Poetry](https://python-poetry.org/docs/pyproject/)
 ```

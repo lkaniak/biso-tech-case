@@ -1,9 +1,10 @@
 from datetime import datetime, timedelta
-from typing import Any
+from typing import Literal
 
 from jose import jwt
 from passlib.context import CryptContext
 
+from src.core.v1.users.models import User
 from src.infrastructure.settings import settings
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -12,10 +13,25 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 ALGORITHM = "HS256"
 
 
-def create_access_token(subject: str | Any, expires_delta: timedelta) -> str:
-    expire = datetime.utcnow() + expires_delta
-    to_encode = {"exp": expire, "sub": str(subject)}
-    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
+def create_access_token(
+    user: User, token_type: Literal["refresh", "access"], ttl: int
+) -> str:
+    # This function generates token with any claims you want
+
+    payload = {
+        "sub": user.email,
+        "iat": datetime.utcnow(),
+        "exp": datetime.utcnow() + timedelta(minutes=ttl),
+        "user_role": user.role,
+    }
+
+    if token_type == "access":
+        key = settings.SECRET_KEY
+    elif token_type == "refresh":
+        key = settings.REFRESH_SECRET_KEY
+
+    encoded_jwt = jwt.encode(payload, key, "HS256")
+
     return encoded_jwt
 
 

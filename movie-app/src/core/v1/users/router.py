@@ -1,29 +1,27 @@
-from fastapi import APIRouter, Depends, HTTPException
-from typing import Mapping
+from typing import Annotated
+
+from fastapi import APIRouter, Depends
 from src.core.v1.users.deps import (
     valid_user_id,
     valid_user_update,
     valid_user_create,
     allow_open_registration,
     valid_user_delete,
+    get_current_user,
 )
 from src.core.v1.ratings.schemas import Rating
 import src.core.v1.users.service as user_service
-
-from src.core.v1.auth.deps import (
-    CurrentUser,
-    SessionDep,
+from src.core.v1.users.deps import (
     get_current_active_superuser,
 )
 from src.core.v1.users.models import (
     User,
-    UserCreate,
     UserPublic,
-    UserRegister,
     UsersPublic,
     UserUpdate,
-    UserUpdateMe,
+    UserCreate,
 )
+from src.lib.models import Message
 
 router = APIRouter()
 
@@ -33,7 +31,9 @@ router = APIRouter()
     dependencies=[Depends(get_current_active_superuser)],
     response_model=UsersPublic,
 )
-def read_users(skip: int = 0, limit: int = 100) -> UsersPublic:
+def read_users(
+    skip: int = 0, limit: int = 100, current_user: User = Depends(get_current_user)
+) -> UsersPublic:
     """
     Listar usuarios
     """
@@ -46,7 +46,11 @@ def read_users(skip: int = 0, limit: int = 100) -> UsersPublic:
 @router.post(
     "/", dependencies=[Depends(get_current_active_superuser)], response_model=UserPublic
 )
-def create_user(*, user_in: Depends(valid_user_create)) -> User:
+def create_user(
+    *,
+    user_in: Annotated[UserCreate, Depends(valid_user_create)],
+    current_user: User = Depends(get_current_user),
+) -> User:
     """
     Criar usuario
     """
@@ -56,7 +60,9 @@ def create_user(*, user_in: Depends(valid_user_create)) -> User:
 
 @router.patch("/me", response_model=UserPublic)
 def update_user_me(
-    *, user_in: Mapping = Depends(valid_user_update), current_user: CurrentUser
+    *,
+    user_in: UserUpdate = Depends(valid_user_update),
+    current_user: User = Depends(get_current_user),
 ):
     """
     Atualizar o próprio usuário.
@@ -66,7 +72,7 @@ def update_user_me(
 
 
 @router.get("/me", response_model=UserPublic)
-def read_user_me(current_user: CurrentUser):
+def read_user_me(current_user: User = Depends(get_current_user)):
     """
     Get no usuario logado.
     """
@@ -74,7 +80,7 @@ def read_user_me(current_user: CurrentUser):
 
 
 @router.post("/signup", response_model=UserPublic)
-def register_user(user_in: Depends(allow_open_registration)):
+def register_user(user_in: Annotated[UserCreate, Depends(allow_open_registration)]):
     """
     Criar usuário sem login
     """
@@ -84,7 +90,8 @@ def register_user(user_in: Depends(allow_open_registration)):
 
 @router.get("/{user_id}", response_model=UserPublic)
 def read_user_by_id(
-    user: Depends(valid_user_id),
+    user: Annotated[User, Depends(valid_user_id)],
+    current_user: User = Depends(get_current_user),
 ):
     """
     Obter usuário por id.
@@ -99,34 +106,27 @@ def read_user_by_id(
 )
 def update_user(
     *,
-    session: SessionDep,
     user_in: UserUpdate = Depends(valid_user_update),
+    current_user: User = Depends(get_current_user),
 ):
     """
     Update em um usuário por id.
     """
 
-    db_user = user_service.update_user(session=session, user_in=user_in)
+    db_user = user_service.update_user(user_in=user_in)
     return db_user
 
 
 @router.delete("/{user_id}", dependencies=[Depends(get_current_active_superuser)])
 def delete_user(
-    session: SessionDep,
     user_id: int,
-    current_user: CurrentUser = Depends(valid_user_delete),
+    current_user: User = Depends(valid_user_delete),
 ) -> Message:
     """
     Remover um usuário por id.
     """
-    user = session.get(User, user_id)
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    if user == current_user:
-        raise HTTPException(
-            status_code=403, detail="Super users are not allowed to delete themselves"
-        )
-    return Message(message="User deleted successfully")
+    user_service.delete_user(user_id=user_id)
+    return Message(message="Usuario removido com sucesso")
 
 
 # @router.get("/{user_id}/ratings", response_model=list[Rating])

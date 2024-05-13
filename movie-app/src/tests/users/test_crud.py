@@ -9,12 +9,12 @@ import src.core.v1.auth.service as login_service
 from src.tests.fixtures import test_settings
 
 
-async def authenticate_user(db: Session) -> User:
+def authenticate_user(db: Session) -> User:
     email = random_email()
     password = random_lower_string()
     user_in = UserCreate(email=email, password=password)
     user = user_service.create_user(session=db, user_create=user_in)
-    authenticated_user = await login_service.authenticate(
+    authenticated_user = login_service.authenticate(
         session=db, email=email, password=password
     )
     assert authenticated_user
@@ -60,8 +60,8 @@ def delete_user(db: Session, user_id: int):
     assert user is None
 
 
-async def test_crud(db: Session):
-    auth_user = await authenticate_user(db=db)
+def test_crud(db: Session):
+    auth_user = authenticate_user(db=db)
     created_user = create_update_user(db=db)
     users = get_user(
         db=db, user_id=auth_user.id, user_email=test_settings.EMAIL_TEST_USER

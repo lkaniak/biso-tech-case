@@ -1,8 +1,9 @@
-from datetime import timedelta
+from typing import Annotated
 
 from fastapi import APIRouter, Depends
 from src.core.v1.users.models import User
-from src.core.v1.auth.deps import valid_authentication
+from src.core.v1.auth.deps import valid_authentication, decode_refresh_token
+from src.core.v1.users.service import get_user_by_email
 from src.infrastructure import security
 from src.infrastructure.settings import settings
 from src.core.v1.auth.models import Token
@@ -10,15 +11,36 @@ from src.core.v1.auth.models import Token
 router = APIRouter()
 
 
-@router.post("/login/access-token")
-def login_access_token(user: User = Depends(valid_authentication)) -> Token:
+@router.post("/login/token")
+def login_access_token(
+    user: User = Annotated[User, Depends(valid_authentication)]
+) -> Token:
     """
     Gerar token OAuth2 (JWT)
     """
-
-    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = security.create_access_token(
+        user=user, token_type="access", ttl=settings.ACCESS_TOKEN_EXPIRE_MINUTES
+    )
+    refresh_token = security.create_access_token(
+        user=user, token_type="access", ttl=settings.ACCESS_TOKEN_EXPIRE_MINUTES
+    )
     return Token(
-        access_token=security.create_access_token(
-            user.id, expires_delta=access_token_expires
-        )
+        access_token=access_token, refresh_token=refresh_token, token_type="bearer"
+    )
+
+
+@router.post("/login/token")
+def login_access_token(token: dict = Depends(decode_refresh_token)) -> Token:
+    """
+    Dar refresh no token OAuth2 (JWT)
+    """
+    user = get_user_by_email(email=token.get["sub"])
+    access_token = security.create_access_token(
+        user=user, token_type="access", ttl=settings.ACCESS_TOKEN_EXPIRE_MINUTES
+    )
+    refresh_token = security.create_access_token(
+        user=user, token_type="access", ttl=settings.ACCESS_TOKEN_EXPIRE_MINUTES
+    )
+    return Token(
+        access_token=access_token, refresh_token=refresh_token, token_type="bearer"
     )

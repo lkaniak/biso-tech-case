@@ -3,6 +3,8 @@ from typing import Any
 
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, ConfigDict, model_validator
+from sqlmodel import SQLModel
+
 from src.lib.utils import convert_datetime_to_gmt
 
 
@@ -34,3 +36,7 @@ class CustomModel(BaseModel):
 class ListData(BaseModel):
     count: int
     data: list[Any]
+
+
+class Message(SQLModel):
+    message: str
