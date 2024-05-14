@@ -1,7 +1,7 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends
-from api.core.v1.users.models import User
+from api.lib.models import User
 from api.core.v1.auth.deps import valid_authentication, decode_refresh_token
 from api.core.v1.users.service import get_user_by_email
 from api.infrastructure import security

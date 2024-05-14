@@ -15,11 +15,11 @@ from api.infrastructure.security import verify_password
 from api.infrastructure.settings import settings
 from api.core.v1.auth.deps import decode_refresh_token
 from api.core.v1.users.models import (
-    User,
     UserCreate,
     UserRegister,
     UserUpdate,
 )
+from api.lib.models import User
 
 
 def get_current_user(token: dict = Depends(decode_refresh_token)) -> User:

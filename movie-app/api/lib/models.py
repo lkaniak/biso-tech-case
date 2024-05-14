@@ -1,36 +1,34 @@
-from datetime import datetime
 from typing import Any
 
-from fastapi.encoders import jsonable_encoder
-from pydantic import BaseModel, ConfigDict, model_validator
-from sqlmodel import SQLModel
+from pydantic import BaseModel
 
-from api.lib.utils import convert_datetime_to_gmt
+from sqlmodel import SQLModel, Field, Relationship
 
 
-class CustomModel(BaseModel):
-    model_config = ConfigDict(
-        json_encoders={datetime: convert_datetime_to_gmt},
-        populate_by_name=True,
+from api.core.v1.ratings.models import RatingBase
+from api.core.v1.users.models import UserBase
+from api.core.v1.movies.models import MovieBase
+
+
+class User(UserBase, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    hashed_password: str
+    user_ratings: list["Rating"] = Relationship(back_populates="rater")
+
+
+class Movie(MovieBase, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    movie_ratings: list["Rating"] = Relationship(back_populates="movie_rated")
+
+
+class Rating(RatingBase, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    rater_id: int | None = Field(default=None, foreign_key="user.id", nullable=False)
+    rater: User | None = Relationship(back_populates="user_ratings")
+    movie_rated_id: int | None = Field(
+        default=None, foreign_key="movie.id", nullable=False
     )
-
-    @model_validator(mode="before")
-    @classmethod
-    def set_null_microseconds(cls, data: dict[str, Any]) -> dict[str, Any]:
-        """zera os microssegundos do datetime"""
-        datetime_fields = {
-            k: v.replace(microsecond=0)
-            for k, v in data.items()
-            if isinstance(k, datetime)
-        }
-
-        return {**data, **datetime_fields}
-
-    def serializable_dict(self, **kwargs):
-        """Retorna um dict apenas com os campos serializaveis"""
-        default_dict = self.model_dump()
-
-        return jsonable_encoder(default_dict)
+    movie_rated: Movie | None = Relationship(back_populates="movie_ratings")
 
 
 class ListData(BaseModel):

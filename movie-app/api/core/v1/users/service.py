@@ -1,9 +1,8 @@
 from sqlmodel import delete, func, select
 
-from api.lib.models import ListData
+from api.lib.models import ListData, User
 from typing import Any
 from api.core.v1.users.models import (
-    User,
     UserCreate,
     UserUpdate,
 )

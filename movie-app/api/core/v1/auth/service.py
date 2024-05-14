@@ -1,5 +1,5 @@
 import api.core.v1.users.service as user_service
-from api.core.v1.users.models import User
+from api.lib.models import User
 from api.infrastructure.security import verify_password
 
 

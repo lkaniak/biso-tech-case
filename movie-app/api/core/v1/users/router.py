@@ -15,13 +15,12 @@ from api.core.v1.users.deps import (
     get_current_active_superuser,
 )
 from api.core.v1.users.models import (
-    User,
     UserPublic,
     UsersPublic,
     UserUpdate,
     UserCreate,
 )
-from api.lib.models import Message
+from api.lib.models import Message, User
 
 router = APIRouter()
 

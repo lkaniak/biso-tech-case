@@ -1,6 +1,6 @@
 from sqlmodel import Session
 
-from api.core.v1.users.models import UserCreate, UserUpdate
+from api.lib.models import UserCreate, UserUpdate
 from api.infrastructure.settings import settings
 from fastapi.testclient import TestClient
 import api.core.v1.users.service as user_service

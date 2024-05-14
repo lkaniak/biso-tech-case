@@ -4,7 +4,7 @@ import pandas as pd
 from sqlalchemy import insert
 from sqlmodel import select, Session
 
-from api.core.v1.movies.models import Movie
+from api.lib.models import Movie
 from api.infrastructure.database.engine import engine
 from api.infrastructure.database.session import db_session
 

@@ -6,7 +6,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 from api.core.v1.auth.exceptions import InvalidCredentials, InactiveUser
 from api.core.v1.auth.models import TokenPayload
-from api.core.v1.users.models import User
+from api.lib.models import User
 
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
