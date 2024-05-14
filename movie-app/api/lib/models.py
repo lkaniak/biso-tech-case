@@ -5,7 +5,7 @@ from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, ConfigDict, model_validator
 from sqlmodel import SQLModel
 
-from src.lib.utils import convert_datetime_to_gmt
+from api.lib.utils import convert_datetime_to_gmt
 
 
 class CustomModel(BaseModel):

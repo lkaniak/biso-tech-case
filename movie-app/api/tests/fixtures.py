@@ -5,10 +5,10 @@ import pytest
 from fastapi.testclient import TestClient
 from sqlmodel import Session
 
-from src.core.v1.users.utils import init_test_db
-from src.infrastructure.database.engine import engine
+from api.core.v1.users.utils import init_test_db
+from api.infrastructure.database.engine import engine
 
-from src.main import app
+from api.main import app
 
 
 @pytest.fixture(scope="module")

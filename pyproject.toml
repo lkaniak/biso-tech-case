@@ -3,7 +3,7 @@ name = "movie-app"
 version = "0.1.0"
 description = "recomendação e catálogo de filmes"
 authors = ["Lucas Kaniak <kaniak.lucas@outlook.com>"]
-packages = [{include = "src", from="src"}]
+packages = [{include = "api", from="movie-app"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -25,6 +25,7 @@ pydantic-settings = "^2.2.1"
 contextvars = "^2.4"
 random-username = "^1.0.2"
 pandas = "^2.2.2"
+names = "^0.3.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.3"

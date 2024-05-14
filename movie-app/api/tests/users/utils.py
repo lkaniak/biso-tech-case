@@ -1,11 +1,11 @@
 from sqlmodel import Session
 
-from src.core.v1.users.models import UserCreate, UserUpdate
-from src.infrastructure.settings import settings
+from api.core.v1.users.models import UserCreate, UserUpdate
+from api.infrastructure.settings import settings
 from fastapi.testclient import TestClient
-import src.core.v1.users.service as user_service
-from src.lib.utils import random_lower_string
-from src.tests.fixtures import db
+import api.core.v1.users.service as user_service
+from api.lib.utils import random_lower_string
+from api.tests.fixtures import db
 
 
 def user_authentication_headers(

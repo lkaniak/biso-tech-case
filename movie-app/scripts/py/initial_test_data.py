@@ -1,9 +1,9 @@
 import logging
 
-import src.core
+import api.core
 
-print(src.core)
-from src.core.v1.users.utils import init_test_db
+print(api.core)
+from api.core.v1.users.utils import init_test_db
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

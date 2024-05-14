@@ -1,7 +1,7 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends
-from src.core.v1.users.deps import (
+from api.core.v1.users.deps import (
     valid_user_id,
     valid_user_update,
     valid_user_create,
@@ -9,19 +9,19 @@ from src.core.v1.users.deps import (
     valid_user_delete,
     get_current_user,
 )
-from src.core.v1.ratings.schemas import Rating
-import src.core.v1.users.service as user_service
-from src.core.v1.users.deps import (
+from api.core.v1.ratings.schemas import Rating
+import api.core.v1.users.service as user_service
+from api.core.v1.users.deps import (
     get_current_active_superuser,
 )
-from src.core.v1.users.models import (
+from api.core.v1.users.models import (
     User,
     UserPublic,
     UsersPublic,
     UserUpdate,
     UserCreate,
 )
-from src.lib.models import Message
+from api.lib.models import Message
 
 router = APIRouter()
 

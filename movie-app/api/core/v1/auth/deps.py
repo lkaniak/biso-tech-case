@@ -1,18 +1,18 @@
 from pydantic import ValidationError
 
-import src.core.v1.auth.service as auth_service
+import api.core.v1.auth.service as auth_service
 
 from fastapi.security import OAuth2PasswordRequestForm
 
-from src.core.v1.auth.exceptions import InvalidCredentials, InactiveUser
-from src.core.v1.auth.models import TokenPayload
-from src.core.v1.users.models import User
+from api.core.v1.auth.exceptions import InvalidCredentials, InactiveUser
+from api.core.v1.auth.models import TokenPayload
+from api.core.v1.users.models import User
 
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 
-from src.infrastructure.settings import settings
+from api.infrastructure.settings import settings
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 

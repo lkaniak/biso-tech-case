@@ -24,7 +24,7 @@ def upgrade() -> None:
         "movie",
         sa.Column("id", sa.Integer, primary_key=True),
         sa.Column("title", sa.String(1024), nullable=False),
-        sa.Column("genders", sa.String(512), nullable=False),
+        sa.Column("genres", sa.String(512), nullable=False),
     )
 
 

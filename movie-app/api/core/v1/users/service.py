@@ -1,15 +1,15 @@
 from sqlmodel import delete, func, select
 
-from src.lib.models import ListData
+from api.lib.models import ListData
 from typing import Any
-from src.core.v1.users.models import (
+from api.core.v1.users.models import (
     User,
     UserCreate,
     UserUpdate,
 )
 
-from src.infrastructure.security import get_password_hash
-from src.infrastructure.database.session import db_session
+from api.infrastructure.security import get_password_hash
+from api.infrastructure.database.session import db_session
 
 
 def list_users(skip=0, limit=100):

@@ -1,7 +1,7 @@
 import logging
 
-from src.core.v1.movies.utils import init_db_movies
-from src.core.v1.users.utils import init_db_users
+from api.core.v1.movies.utils import init_db_movies
+from api.core.v1.users.utils import init_db_users
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

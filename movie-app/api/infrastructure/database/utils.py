@@ -3,7 +3,7 @@ from typing import Generator
 
 from sqlmodel import Session
 
-from src.infrastructure.database.engine import engine
+from api.infrastructure.database.engine import engine
 
 
 def get_db() -> Generator[Session, None, None]:

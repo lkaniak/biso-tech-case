@@ -17,8 +17,8 @@ RUN poetry self add poetry-dotenv-plugin
 
 ENV PYTHONPATH=/app
 
-COPY ./scripts /app/scripts
+COPY movie-app/scripts /app/scripts
 
 COPY alembic.ini /app/
 
-COPY ./src /app/
+COPY movie-app/api /app/

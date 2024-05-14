@@ -1,12 +1,12 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends
-from src.core.v1.users.models import User
-from src.core.v1.auth.deps import valid_authentication, decode_refresh_token
-from src.core.v1.users.service import get_user_by_email
-from src.infrastructure import security
-from src.infrastructure.settings import settings
-from src.core.v1.auth.models import Token
+from api.core.v1.users.models import User
+from api.core.v1.auth.deps import valid_authentication, decode_refresh_token
+from api.core.v1.users.service import get_user_by_email
+from api.infrastructure import security
+from api.infrastructure.settings import settings
+from api.core.v1.auth.models import Token
 
 router = APIRouter()
 

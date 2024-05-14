@@ -1,8 +1,8 @@
 from fastapi import Depends, HTTPException
 
-import src.core.v1.users.service as user_service
-from src.core.v1.auth.exceptions import InactiveUser
-from src.core.v1.users.exceptions import (
+import api.core.v1.users.service as user_service
+from api.core.v1.auth.exceptions import InactiveUser
+from api.core.v1.users.exceptions import (
     UserNotFound,
     EmailAlreadyExists,
     InvalidPassword,
@@ -10,11 +10,11 @@ from src.core.v1.users.exceptions import (
     RegistrationNotSupported,
     SelfDeleteError,
 )
-from src.infrastructure.database.session import db_session
-from src.infrastructure.security import verify_password
-from src.infrastructure.settings import settings
-from src.core.v1.auth.deps import decode_refresh_token
-from src.core.v1.users.models import (
+from api.infrastructure.database.session import db_session
+from api.infrastructure.security import verify_password
+from api.infrastructure.settings import settings
+from api.core.v1.auth.deps import decode_refresh_token
+from api.core.v1.users.models import (
     User,
     UserCreate,
     UserRegister,

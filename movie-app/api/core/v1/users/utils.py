@@ -1,14 +1,35 @@
-from fastapi import Depends
-from sqlalchemy import create_engine
-from sqlmodel import select, SQLModel, Session
+import names
+from sqlmodel import select, insert, Session
 
-from src.core.v1.users.models import User, UserCreate
-from src.infrastructure.database.engine import engine
-from src.infrastructure.security import get_password_hash
-from src.infrastructure.settings import settings
-from src.core.v1.users.service import create_user
-from src.infrastructure.database.session import db_session
-from src.tests.settings import test_settings
+from api.core.v1.users.models import User, UserCreate
+from api.infrastructure.database.engine import engine
+from api.infrastructure.security import get_password_hash
+from api.infrastructure.settings import settings
+from api.core.v1.users.service import create_user
+from api.infrastructure.database.session import db_session
+from api.lib.utils import random_email, random_lower_string, random_nickname
+from api.tests.settings import test_settings
+
+
+def generate_user() -> UserCreate:
+    email = random_email()
+    password = random_lower_string()
+    nickname = random_nickname()
+    full_name = names.get_full_name()
+    return UserCreate(
+        email=email,
+        password=password,
+        nickname=nickname,
+        full_name=full_name,
+    )
+
+
+def populate_users(session: Session, qtd: int, users_limit: int = 50):
+    users = session.exec(select(User)).all()
+    if not len(users) > users_limit:
+        generated_users = [generate_user() for x in range(0, qtd + 1)]
+        session.execute(insert(User), generated_users)
+        session.commit()
 
 
 def init_db_users() -> None:
@@ -26,6 +47,7 @@ def init_db_users() -> None:
                 is_superuser=True,
             )
             user = create_user(user_create=user_in)
+        populate_users(session=session, qtd=50)
 
 
 def init_test_db() -> None:

@@ -1,9 +1,9 @@
 from fastapi import Depends, Request
 from sqlmodel import Session
 
-from src.infrastructure.database.session import db_session
-from src.infrastructure.database.utils import get_db
-from src.main import app
+from api.infrastructure.database.session import db_session
+from api.infrastructure.database.utils import get_db
+from api.main import app
 
 
 @app.middleware("http")

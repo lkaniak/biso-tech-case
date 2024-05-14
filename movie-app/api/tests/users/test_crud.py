@@ -1,13 +1,13 @@
 from fastapi.encoders import jsonable_encoder
 from sqlmodel import Session
 
-from src.core.v1.users.models import UserCreate, UserUpdate, User
-from src.infrastructure.security import verify_password
-from src.lib.utils import random_email, random_lower_string, random_nickname
-import src.core.v1.users.service as user_service
-import src.core.v1.auth.service as login_service
-from src.tests.fixtures import db
-from src.tests.settings import test_settings
+from api.core.v1.users.models import UserCreate, UserUpdate, User
+from api.infrastructure.security import verify_password
+from api.lib.utils import random_email, random_lower_string, random_nickname
+import api.core.v1.users.service as user_service
+import api.core.v1.auth.service as login_service
+from api.tests.fixtures import db
+from api.tests.settings import test_settings
 
 
 def authenticate_user(db) -> User:
