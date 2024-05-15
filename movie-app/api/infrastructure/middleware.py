@@ -11,6 +11,7 @@ async def db_session_middleware(
     request: Request, call_next, database_session: Session = Depends(get_db)
 ):
     token = db_session.set(database_session)
+    print("asdfsadfasdf")
     try:
         response = await call_next(request)
     finally:

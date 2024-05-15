@@ -13,11 +13,12 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 
 from api.infrastructure.settings import settings
+from sqlmodel import Session
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/login/token")
 
 
-async def decode_access_token(token: str = Depends(oauth2_scheme)) -> dict:
+def decode_access_token(token: str = Depends(oauth2_scheme)) -> dict:
 
     try:
         payload = jwt.decode(
@@ -25,14 +26,12 @@ async def decode_access_token(token: str = Depends(oauth2_scheme)) -> dict:
             settings.SECRET_KEY,
             algorithms="HS256",
         )
-        token_data = TokenPayload(**payload)
+        return payload["sub"]
     except (JWTError, ValidationError):
         raise InvalidCredentials()
 
-    return token_data.sub
 
-
-async def decode_refresh_token(token: str = Depends(oauth2_scheme)) -> dict:
+def decode_refresh_token(token: str = Depends(oauth2_scheme)) -> dict:
 
     try:
         payload = jwt.decode(
@@ -40,17 +39,13 @@ async def decode_refresh_token(token: str = Depends(oauth2_scheme)) -> dict:
             settings.REFRESH_SECRET_KEY,
             algorithms="HS256",
         )
-        token_data = TokenPayload(**payload)
+        return payload["sub"]
     except (JWTError, ValidationError):
         raise InvalidCredentials()
 
-    return token_data.sub
 
-
-async def valid_authentication(
-    form_data: [OAuth2PasswordRequestForm, Depends()]
-) -> User:
-    user = await auth_service.authenticate(
+def valid_authentication(form_data: OAuth2PasswordRequestForm) -> User:
+    user = auth_service.authenticate(
         email=form_data.username, password=form_data.password
     )
     if not user:

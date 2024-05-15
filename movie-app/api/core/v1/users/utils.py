@@ -58,7 +58,6 @@ def init_test_db() -> None:
             select(User).where(User.email == test_settings.EMAIL_TEST_USER)
         ).first()
         if not user:
-            print(f"test_settings: {test_settings}")
             user_in = UserCreate(
                 email=test_settings.EMAIL_TEST_USER,
                 password=test_settings.FIRST_SUPERUSER_PASSWORD,

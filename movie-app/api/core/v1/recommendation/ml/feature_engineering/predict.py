@@ -1,5 +1,5 @@
 from os import path
-from api.core.v1.recommendation.ml.schemas import NewUserRatings
+from api.core.v1.recommendation.schemas import NewUserRatings
 from api.core.v1.recommendation.ml.utils import (
     gen_user_vecs,
     generate_subset_movies_not_rated,

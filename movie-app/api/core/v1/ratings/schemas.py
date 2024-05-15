@@ -8,3 +8,7 @@ class Rating(BaseModel):
     user_id: int
     rating: Decimal
     updated_at: datetime
+
+
+class RatingInsert(BaseModel):
+    rating: Decimal

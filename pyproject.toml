@@ -29,6 +29,7 @@ names = "^0.3.0"
 matplotlib = "^3.8.4"
 seaborn = "^0.13.2"
 scikit-learn = "1.2.2"
+python-multipart = "^0.0.9"
 
 [tool.poetry.group.tensorflow.dependencies]
 tensorflow = {version = "^2.13.0" }

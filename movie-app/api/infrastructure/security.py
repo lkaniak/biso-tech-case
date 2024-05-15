@@ -16,13 +16,13 @@ ALGORITHM = "HS256"
 def create_access_token(
     user: User, token_type: Literal["refresh", "access"], ttl: int
 ) -> str:
-    # This function generates token with any claims you want
 
+    # This function generates token with any claims you want
     payload = {
         "sub": user.email,
         "iat": datetime.utcnow(),
         "exp": datetime.utcnow() + timedelta(minutes=ttl),
-        "user_role": user.role,
+        "user_role": "admin" if user.is_superuser else "regular",
     }
 
     if token_type == "access":

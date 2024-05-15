@@ -9,7 +9,6 @@ from api.core.v1.users.deps import (
     valid_user_delete,
     get_current_user,
 )
-from api.core.v1.ratings.schemas import Rating
 import api.core.v1.users.service as user_service
 from api.core.v1.users.deps import (
     get_current_active_superuser,
@@ -28,10 +27,11 @@ router = APIRouter()
 @router.get(
     "/",
     dependencies=[Depends(get_current_active_superuser)],
-    response_model=UsersPublic,
 )
 def read_users(
-    skip: int = 0, limit: int = 100, current_user: User = Depends(get_current_user)
+    skip: int = 0,
+    limit: int = 100,
+    current_user: User = Depends(get_current_user),
 ) -> UsersPublic:
     """
     Listar usuarios
@@ -42,9 +42,7 @@ def read_users(
     return UsersPublic(data=list_data.data, count=list_data.count)
 
 
-@router.post(
-    "/", dependencies=[Depends(get_current_active_superuser)], response_model=UserPublic
-)
+@router.post("/", dependencies=[Depends(get_current_active_superuser)])
 def create_user(
     *,
     user_in: Annotated[UserCreate, Depends(valid_user_create)],
@@ -57,7 +55,7 @@ def create_user(
     return user
 
 
-@router.patch("/me", response_model=UserPublic)
+@router.patch("/me")
 def update_user_me(
     *,
     user_in: UserUpdate = Depends(valid_user_update),
@@ -70,16 +68,20 @@ def update_user_me(
     return user
 
 
-@router.get("/me", response_model=UserPublic)
-def read_user_me(current_user: User = Depends(get_current_user)):
+@router.get("/me")
+def read_user_me(
+    current_user: User = Depends(get_current_user),
+):
     """
     Get no usuario logado.
     """
     return current_user
 
 
-@router.post("/signup", response_model=UserPublic)
-def register_user(user_in: Annotated[UserCreate, Depends(allow_open_registration)]):
+@router.post("/signup")
+def register_user(
+    user_in: Annotated[UserCreate, Depends(allow_open_registration)],
+):
     """
     Criar usuário sem login
     """
@@ -87,7 +89,7 @@ def register_user(user_in: Annotated[UserCreate, Depends(allow_open_registration
     return user
 
 
-@router.get("/{user_id}", response_model=UserPublic)
+@router.get("/{user_id}")
 def read_user_by_id(
     user: Annotated[User, Depends(valid_user_id)],
     current_user: User = Depends(get_current_user),
@@ -101,7 +103,6 @@ def read_user_by_id(
 @router.patch(
     "/{user_id}",
     dependencies=[Depends(get_current_active_superuser)],
-    response_model=UserPublic,
 )
 def update_user(
     *,
@@ -127,10 +128,3 @@ def delete_user(
     """
     user_service.delete_user(user_id=user_id)
     return Message(message="Usuario removido com sucesso")
-
-
-# @router.get("/{user_id}/ratings", response_model=list[Rating])
-# async def get_user_ratings(user: Mapping = Depends(valid_user_id)):
-#     ratings = await service.get_ratings(user["id"])
-#
-#     return ratings

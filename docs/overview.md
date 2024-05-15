@@ -42,3 +42,7 @@
 │               └── tests-start.sh
 └── pyproject.toml                        # definicao do env para o [Poetry](https://python-poetry.org/docs/pyproject/)
 ```
+
+# Database
+
+![alt text](database.png)

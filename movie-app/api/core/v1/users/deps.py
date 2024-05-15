@@ -1,3 +1,4 @@
+from api.infrastructure.database.engine import engine
 from fastapi import Depends, HTTPException
 
 import api.core.v1.users.service as user_service
@@ -13,18 +14,18 @@ from api.core.v1.users.exceptions import (
 from api.infrastructure.database.session import db_session
 from api.infrastructure.security import verify_password
 from api.infrastructure.settings import settings
-from api.core.v1.auth.deps import decode_refresh_token
+from api.core.v1.auth.deps import decode_access_token
 from api.core.v1.users.models import (
     UserCreate,
     UserRegister,
     UserUpdate,
 )
 from api.lib.models import User
+from sqlmodel import Session
 
 
-def get_current_user(token: dict = Depends(decode_refresh_token)) -> User:
-    session = db_session.get()
-    user = session.get(User, token.get("id"))
+def get_current_user(sub: str = Depends(decode_access_token)) -> User:
+    user = user_service.get_user_by_email(email=sub)
     if not user:
         raise UserNotFound()
     if not user.is_active:
@@ -43,7 +44,8 @@ def get_current_active_superuser(
 
 
 def valid_user_id(
-    user_id: int, current_user: User = Depends(get_current_active_superuser)
+    user_id: int,
+    current_user: User = Depends(get_current_active_superuser),
 ) -> User:
     user = user_service.get_by_id(user_id)
     if not user:
