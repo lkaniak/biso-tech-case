@@ -25,6 +25,7 @@ def upgrade() -> None:
         sa.Column("id", sa.Integer, primary_key=True),
         sa.Column("title", sa.String(1024), nullable=False),
         sa.Column("genres", sa.String(512), nullable=False),
+        sa.Column("imdb_rating", sa.Float, nullable=False, default=0),
     )
 
 

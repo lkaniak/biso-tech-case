@@ -1,4 +1,5 @@
 import random
+import numpy as np
 from datetime import datetime
 
 from sqlalchemy import insert, Sequence
@@ -18,7 +19,7 @@ def generate_rating(users_ids: Sequence[User], movies_ids: Sequence[Movie]):
         rater_id=chosen_user_id,
         movie_rated_id=chosen_movie_id,
         rating=random.choices(
-            [0, 1, 2, 3, 4, 5],
+            np.arange(0.0, 5.0, 0.5),
             k=32,
         )[0],
         updated_at=datetime.now(),
@@ -28,12 +29,12 @@ def generate_rating(users_ids: Sequence[User], movies_ids: Sequence[Movie]):
 def populate_ratings(
     session: Session,
     qty: int,
-    users_ids: Sequence[User],
-    movies_ids: Sequence[Movie],
-    max_ratings: int = 1000,
+    max_ratings: int = 1000001,
 ):
     ratings = session.exec(select(Rating)).all()
     if not len(ratings) > max_ratings:
+        movies_ids = session.exec(select(Movie.id)).all()
+        users_ids = session.exec(select(User.id)).all()
         generated_ratings = [
             generate_rating(users_ids, movies_ids) for x in range(0, qty + 1)
         ]
@@ -44,10 +45,5 @@ def populate_ratings(
 def init_db_ratings() -> None:
     with Session(engine) as session:
         db_session.set(session)
-        rating = session.exec(select(Rating)).first()
-        if not rating:
-            movies_ids = session.exec(select(Movie.id)).all()
-            users_ids = session.exec(select(User.id)).all()
-        populate_ratings(
-            session=session, qty=700, users_ids=users_ids, movies_ids=movies_ids
-        )
+
+        populate_ratings(session=session, qty=100000)

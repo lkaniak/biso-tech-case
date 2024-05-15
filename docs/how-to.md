@@ -8,10 +8,11 @@
 **OBS:** reiniciar o shell depois de instalar o Poetry!
 
 1) instalar as deps do projeto, com o seguinte comando na pasta movie-app: ``poetry install``
+  1.1) verificar no ``pyproject.toml`` a versão do tensorflow para instalar de acordo com o hardware no grupo ``[tool.poetry.group.tensorflow.dependencies]``
 2) Plugin para o poetry reconhecer e inserir o .env: ``poetry self add poetry-dotenv-plugin``
 3) Ativar o shell do poetry: ``poetry shell``
 4) Migrations: ``alembic upgrade head``
-5)
+5) Rodar a geração do modelo: ``movie-app/scripts/py/generate_model_f_eng.py``
 
 
 ## Testes

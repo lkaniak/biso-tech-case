@@ -1,6 +1,7 @@
 import os
 
 import pandas as pd
+import numpy as np
 from sqlalchemy import insert
 from sqlmodel import select, Session
 
@@ -17,5 +18,6 @@ def init_db_movies() -> None:
             df = pd.read_csv(os.path.join(os.path.dirname(__file__), "movies.csv"))
             df.columns = ["id", "title", "genres"]
             df["id"] = df["id"].astype(int)
+            df["imdb_rating"] = np.random.choice([3.0, 3.5, 4.0, 4.5, 5.0], df.shape[0])
             session.execute(insert(Movie), df.to_dict(orient="records"))
             session.commit()

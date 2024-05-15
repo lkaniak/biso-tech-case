@@ -25,7 +25,7 @@ def upgrade() -> None:
         sa.Column("id", sa.Integer, primary_key=True),
         sa.Column("rater_id", sa.Integer, nullable=False),
         sa.Column("movie_rated_id", sa.Integer, nullable=False),
-        sa.Column("rating", sa.Integer, nullable=False, default=0),
+        sa.Column("rating", sa.Float, nullable=False, default=0),
         sa.Column("updated_at", sa.DateTime, nullable=False),
         sa.ForeignKeyConstraint(
             ["rater_id"],
