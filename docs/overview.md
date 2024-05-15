@@ -56,4 +56,8 @@
 
 # teoria do sistema de recomendação
 
-https://medium.com/intro-to-artificial-intelligence/recommendation-engine-algorithm-content-based-filtering-92297632e77f
+[estudo feito](../movie-app/api/core/v1/recommendation/ml/feature_engineering/feature_engineering.ipynb)
+
+## links
+
+- https://medium.com/intro-to-artificial-intelligence/recommendation-engine-algorithm-content-based-filtering-92297632e77f
